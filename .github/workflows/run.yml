@@ -7,6 +7,7 @@ on:
     branches: [ main ]
   schedule:
     - cron: 0 12 * * *
+  workflow_dispatch: #添加这一行以启用手动触发
   watch:
     types: started
 
