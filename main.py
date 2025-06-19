@@ -1,15 +1,12 @@
 # -*- coding: utf8 -*-
 # python >=3.8
-import requests, time, re, json, random
+def get_local_time():
+    utc_time = time.gmtime()  # 获取UTC时间
+    # 转换为UTC+8时区（北京时间）
+    beijing_time = time.localtime(time.mktime(utc_time) + 8 * 3600)
+    return time.strftime("%Y-%m-%d %H:%M:%S", beijing_time)
 
-now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-headers = {
-    'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)'
-}
-import datetime  # 添加这个导入
-import requests,time,re,json,random
-
-now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+now = get_local_time()  # 使用正确时区的时间
 headers = {
         'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)'
         }
