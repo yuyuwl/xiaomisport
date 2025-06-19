@@ -2,9 +2,9 @@ name: 刷步数
 
 on:
   push:
-    branches: [主]
+    branches: [main]
   pull_request:
-    branches: [主]
+    branches: [main]
   schedule:
     - cron: '0 12 * * *'  # 添加引号
   watch:  # GitHub 没有 "watch" 事件类型
