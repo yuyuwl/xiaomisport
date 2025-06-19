@@ -5,6 +5,7 @@ import requests, time, re, json, random
 now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 headers = {
     'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)'
+    }
 def get_local_time():
     utc_time = time.gmtime()  # 获取UTC时间
     # 转换为UTC+8时区（北京时间）
