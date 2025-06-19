@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 # python >=3.8
-
+import datetime  # 添加这个导入
 import requests,time,re,json,random
 
 now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -107,7 +107,27 @@ def get_time():
     url = 'http://quan.suning.com/getSysTime.do'
     response = requests.get(url,headers=headers).json()
     t = response['sysTime1']
-    return t
+    return tdef get_time():
+    url = 'http://quan.suning.com/getSysTime.do'
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        # 解析苏宁API响应
+        suning_time = response.json()
+        print(f"苏宁API响应: {suning_time}")  # 调试日志
+        
+        # 获取时间字符串并转换
+        time_str = suning_time['sysTime2']
+        dt = datetime.datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S")
+        timestamp = int(dt.timestamp() * 1000)
+        
+        print(f"转换后的时间戳: {timestamp}")  # 调试日志
+        return str(timestamp)
+    except Exception as e:
+        print(f"获取时间失败: {e}")
+        # 失败时返回当前时间戳
+        return str(int(time.time() * 1000))
   
 #获取app_token
 def get_app_token(login_token):
