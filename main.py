@@ -1,5 +1,11 @@
 # -*- coding: utf8 -*-
 # python >=3.8
+import requests, time, re, json, random
+
+now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+headers = {
+    'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)'
+}
 import datetime  # 添加这个导入
 import requests,time,re,json,random
 
@@ -102,30 +108,23 @@ def main(user, passwd, step):
     print(result)
     return result
   
-#获取时间戳
 def get_time():
     url = 'http://quan.suning.com/getSysTime.do'
-    response = requests.get(url,headers=headers).json()
-    t = response['sysTime1']
-    return tdef get_time():
-    url = 'http://quan.suning.com/getSysTime.do'
     try:
-        response = requests.get(url, headers=headers, timeout=10)
-        response.raise_for_status()
-        
-        # 解析苏宁API响应
+        response = requests.get(url, headers=headers)
+        # 解析苏宁API返回的JSON
         suning_time = response.json()
-        print(f"苏宁API响应: {suning_time}")  # 调试日志
+        # 提取sysTime1字段（格式: 20250620153045）
+        time_str = suning_time['sysTime1']
         
-        # 获取时间字符串并转换
-        time_str = suning_time['sysTime2']
-        dt = datetime.datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S")
-        timestamp = int(dt.timestamp() * 1000)
+        # 将sysTime1转换为时间戳（毫秒）
+        # 格式: 20250620153045 → 2025-06-20 15:30:45
+        dt_str = f"{time_str[:4]}-{time_str[4:6]}-{time_str[6:8]} {time_str[8:10]}:{time_str[10:12]}:{time_str[12:14]}"
+        time_array = time.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
+        timestamp = int(time.mktime(time_array)) * 1000
         
-        print(f"转换后的时间戳: {timestamp}")  # 调试日志
         return str(timestamp)
-    except Exception as e:
-        print(f"获取时间失败: {e}")
+    except:
         # 失败时返回当前时间戳
         return str(int(time.time() * 1000))
   
