@@ -2,34 +2,37 @@ name: 刷步数
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
   schedule:
-    - cron: '0 12 * * *'  # 添加引号
-  watch:  # GitHub 没有 "watch" 事件类型
-    types: [started]  # 已启动事件可能不适用于 watch
+    - cron: 0 12 * * *
+  watch:
+    types: started
 
 jobs:
-  构建:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      
-      # 修复第19行错误 - 关键修正点
-      - name: 初始化Python
-        uses: actions/setup-python@v5  # 修复缩进和使用英文关键字
-        with:
-          python-version: "3.11"  # 添加引号
-      
-      - name: 开始
-        run: |  # 修复环境变量语法
-          pip install requests
-          pmode="${{ secrets.PMODE }}"
-          pkey="${{ secrets.PKEY }}"
-          user="${{ secrets.USER }}"
-          pwd="${{ secrets.PWD }}"
-          step="${{ secrets.STEP }}"
-          
-          python3 main.py "$pmode" "$pkey" "$user" "$pwd" "$step"
+    - uses: actions/checkout@v2
+    - name: 初始化Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: 开始
+      run: |
+        pip install requests
+        pmode='${{ secrets.PMODE }}'
+        pkey='${{ secrets.PKEY }}'
+        user='${{ secrets.USER }}'
+        pwd='${{ secrets.PWD }}'
+        step='${{ secrets.STEP }}'
+        
+        python3 main.py <<EOF
+        ${pmode}
+        ${pkey}
+        ${user}
+        ${pwd}
+        ${step}
+        EOF
