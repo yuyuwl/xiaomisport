@@ -1,38 +1,35 @@
-名字：刷步数
+name: 刷步数
 
-在输入：
-  推输入：
-    分支：[ 主 ]
-  拉取请求输入：
-    分支：[ 主 ]
-  日程安排输入：
-    - cron:0 12 * * *
-  观看输入：
-    类型： 已开始
+on:
+  push:
+    branches: [主]
+  pull_request:
+    branches: [主]
+  schedule:
+    - cron: '0 12 * * *'  # 添加引号
+  watch:  # GitHub 没有 "watch" 事件类型
+    types: [started]  # 已启动事件可能不适用于 watch
 
-工作：
-  构建：
-    运行于：ubuntu-latest
+jobs:
+  构建:
+    runs-on: ubuntu-latest
 
-    步骤输入：
-    - 使用：actions/checkout@v4
-    - name:初始化Python
-      使用： actions/setup-python@v5
-      和：
-        python-version： 3.11
-    - name:开始
-      运行： |
-        pip install requests
-        pmode='${{ secrets.PMODE }}'
-        pkey='{{ secrets.PKEY }}'
-        用户='{{ secrets.USER }}'
-        pwd='${{ secrets.PWD }}'
-        step='${{ secrets.STEP }}'
-        
-        python3 main.py <
-        ${模式}
-        ${公钥}
-        ${用户}
-        ${当前工作目录}
-        ${步}
-        文件结束
+    steps:
+      - uses: actions/checkout@v4
+      
+      # 修复第19行错误 - 关键修正点
+      - name: 初始化Python
+        uses: actions/setup-python@v5  # 修复缩进和使用英文关键字
+        with:
+          python-version: "3.11"  # 添加引号
+      
+      - name: 开始
+        run: |  # 修复环境变量语法
+          pip install requests
+          pmode="${{ secrets.PMODE }}"
+          pkey="${{ secrets.PKEY }}"
+          user="${{ secrets.USER }}"
+          pwd="${{ secrets.PWD }}"
+          step="${{ secrets.STEP }}"
+          
+          python3 main.py "$pmode" "$pkey" "$user" "$pwd" "$step"
