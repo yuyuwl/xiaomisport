@@ -16,11 +16,11 @@
 
     步骤输入：
     - 使用：actions/checkout@v4
-    - 名称: 初始化Python
+    - name:初始化Python
       使用： actions/setup-python@v5
       和：
         python-version： 3.11
-    - 名称: 开始
+    - name:开始
       运行： |
         pip install requests
         pmode='${{ secrets.PMODE }}'
